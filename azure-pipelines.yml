@@ -1,0 +1,40 @@
+# azure-pipelines.yml
+trigger:
+  branches:
+    include:
+    - master
+  batch: true
+
+pr: none
+
+resources:
+  repositories:
+  - repository: devops_templates
+    type: github
+    name: WortmannKG/devops_templates
+    endpoint: WortmannKG (3)
+    ref: master
+
+variables:
+  tag1: '$(Build.SourceVersion)'
+  ContainerRegistryName: K8s-registry
+  acr_address: woacrcc.azurecr.io
+  buildcontext: $(Build.SourcesDirectory)
+
+stages:
+- stage: Build
+  displayName: Build and Push Image
+  jobs:
+  - job: Build
+    displayName: Build and Push
+    pool:
+      vmImage: ubuntu-latest
+    steps:
+    - template: k8s/docker-build-push.yml@devops_templates
+      parameters:
+        containerRegistryName: $(ContainerRegistryName)
+        repository: wortmannkg/firecrawl-nuq-postgres
+        acrAddress: $(acr_address)
+        buildContext: $(Build.SourcesDirectory)/apps/nuq-postgres
+        dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+        tag: $(tag1)
