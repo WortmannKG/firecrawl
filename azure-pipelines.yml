@@ -35,6 +35,6 @@ stages:
         containerRegistryName: $(ContainerRegistryName)
         repository: wortmannkg/firecrawl-nuq-postgres
         acrAddress: $(acr_address)
-        buildContext: $(Build.SourcesDirectory)/apps/nuq-postgres
-        dockerfilePath: '$(Build.SourcesDirectory)/Dockerfile'
+        buildContext: $(Build.SourcesDirectory)
+        dockerfilePath: '$(Build.SourcesDirectory)/apps/nuq-postgres/Dockerfile'
         tag: $(tag1)
